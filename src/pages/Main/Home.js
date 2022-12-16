@@ -10,8 +10,10 @@ const Home = () => {
 
   const filters = useSelector((state) => state.filter);
   const { brands, stock } = filters;
-  const products = useSelector((state) => state.products);
-  console.log(products);
+  const { products, isLoading, isError, error } = useSelector(
+    (state) => state.products
+  );
+  console.log(error);
 
   useEffect(() => {
     dispatch(getProducts());
@@ -20,6 +22,13 @@ const Home = () => {
   const activeClass = "text-white  bg-indigo-500 border-white";
 
   let content;
+
+  if (isLoading) {
+    content = <h1>Loading...</h1>;
+  }
+  if (isError) {
+    content = <h1>{error}</h1>;
+  }
 
   if (products.length) {
     content = products.map((product) => (
