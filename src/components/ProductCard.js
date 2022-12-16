@@ -2,10 +2,13 @@ import React from "react";
 import { BiListPlus } from "react-icons/bi";
 import { useLocation } from "react-router-dom";
 import { MdDeleteForever } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
 
 const ProductCard = ({ product }) => {
   // const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   return (
     <div className="shadow-lg relative rounded-3xl border p-3 flex flex-col text-indigo-900">
       {pathname.includes("cart") && (
@@ -33,6 +36,7 @@ const ProductCard = ({ product }) => {
         {!pathname.includes("cart") && (
           <button
             // onClick={() => dispatch(addToCart(product))}
+            onClick={() => dispatch(addToCart(product))}
             className="bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold"
           >
             Add to cart
