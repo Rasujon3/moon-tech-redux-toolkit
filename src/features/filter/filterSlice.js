@@ -9,10 +9,21 @@ const initialState = {
 const filterSlice = createSlice({
   name: "filter",
   initialState,
-  reducers: {},
+  reducers: {
+    toggle: (state) => {
+      state.stock = !state.stock;
+    },
+    toggleBrands: (state, action) => {
+      if (!state.brands.includes(action.payload)) {
+        state.brands.push(action.payload);
+      } else {
+        state.brands = state.brands.filter((brand) => brand !== action.payload);
+      }
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const {} = filterSlice.actions;
+export const { toggle, toggleBrands } = filterSlice.actions;
 
 export default filterSlice.reducer;
