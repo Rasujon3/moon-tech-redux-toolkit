@@ -2,17 +2,40 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [],
+  isLoading: false,
+  isError: false,
+  error: "",
 };
 
-const getProducts = createAsyncThunk("products/getProduct", async () => {});
+export const getProducts = createAsyncThunk("products/getProduct", async () => {
+  const res = await fetch("http://localhost:5000/products");
+  const data = res.json();
+  return data.data;
+});
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
-  extraReducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getProducts.pending, (state, action) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(getProducts.fulfilled, (state, action) => {
+        state.products = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(getProducts.rejected, (state, action) => {
+        state.products = [];
+        state.isLoading = true;
+        state.isError = true;
+        state.error = action.error.message;
+      });
+  },
 });
-
-// Action creators are generated for each case reducer function
-export const {} = productsSlice.actions;
 
 export default productsSlice.reducer;
